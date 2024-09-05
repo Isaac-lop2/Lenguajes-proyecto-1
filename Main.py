@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QTextEdit, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QTextEdit, QFileDialog
 from lexer import Lexer
 from FileManager import FileManager
 
@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
                 </tr>
             """
 
-            # Añadir filas de tokens
+
             for token, data in tokens.items():
                 result_msg += f"""
                 <tr>
