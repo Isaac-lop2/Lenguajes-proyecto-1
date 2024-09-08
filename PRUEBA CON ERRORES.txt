@@ -1,0 +1,6 @@
+si a == 10 entonces
+mientras b != 5 hacer
+a = a + @
+x = $y * (z + 2)
+si _variable! == 100
+mientras 123abc hacer

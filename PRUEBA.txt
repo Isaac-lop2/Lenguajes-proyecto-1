@@ -1,0 +1,5 @@
+si a == 10 entonces
+mientras b != 5 hacer
+a = a + 1
+x = y * (z + 2)
+
