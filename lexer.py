@@ -1,3 +1,5 @@
+import re
+
 class Lexer:
     def __init__(self, content):
         self.content = content.splitlines()
@@ -10,7 +12,7 @@ class Lexer:
         ]
 
         self.operadores = ['+', '-', '*', '/', '%', '=', '==', '!=', '<', '>', '<=', '>=']
-        self.simbolos = ['(', ')', '{', '}', '"', ';']
+        self.simbolos = ['(', ')', '{', '}', '"', ';', ',']  # Añadimos la coma a los símbolos
 
     def is_identificador(self, palabra):
         # Un identificador comienza con letra o guion bajo y sigue con letras o dígitos
@@ -19,8 +21,8 @@ class Lexer:
         return False
 
     def is_numero(self, palabra):
-        # Número en base a `DD*` (solo dígitos)
-        return palabra.isdigit()
+        # Expresión regular para detectar enteros o decimales
+        return bool(re.match(r'^\d+(\.\d+)?$', palabra))
 
     def is_operador(self, palabra):
         return palabra in self.operadores

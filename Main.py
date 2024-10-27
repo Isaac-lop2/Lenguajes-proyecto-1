@@ -1,6 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication,QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QTextEdit, QFileDialog, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QTextEdit, QFileDialog, QLabel
 from lexer import Lexer
+from automata import Automata
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from FileManager import FileManager
@@ -10,7 +11,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.app = app
         self.setWindowIcon(QIcon("matrix.ico"))
-        self.setWindowTitle("Analizador Léxico")
+        self.setWindowTitle("Analizador Léxico y Sintáctico")
         self.setFixedSize(800, 600)
         self.setStyleSheet("background-color: #8193f5")
         self.init_ui()
@@ -24,7 +25,7 @@ class MainWindow(QMainWindow):
         self.intro_text.setAlignment(Qt.AlignCenter)
         label_layout.addWidget(self.intro_text)
 
-        self.outro_text = QLabel("Tabla de operadores")
+        self.outro_text = QLabel("Tabla de operadores y análisis")
         self.outro_text.setAlignment(Qt.AlignCenter)
         label_layout.addWidget(self.outro_text)
 
@@ -36,7 +37,6 @@ class MainWindow(QMainWindow):
         self.load_button.setStyleSheet("background-color: #ad81f5")
         self.load_button.clicked.connect(self.load_file)
         main_layout.addWidget(self.load_button)
-
 
         self.analyze_button = QPushButton("Analizar")
         self.analyze_button.setStyleSheet("background-color: #ad81f5")
@@ -61,7 +61,6 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
     def load_file(self):
-
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Abrir archivo de texto", "", "Text Files (*.txt)")
         if file_path:
@@ -72,6 +71,9 @@ class MainWindow(QMainWindow):
         file_content = self.text_area.toPlainText()
         lexer = Lexer(file_content)
         tokens, errors = lexer.analyze()
+
+        automata = Automata(r"\bfuncion\b.*?\(.*?\)")
+        descripcion_automata = automata.generar_descripcion()
 
         if errors:
             error_msg = "<b>Errores léxicos encontrados:</b><br>"
@@ -104,7 +106,6 @@ class MainWindow(QMainWindow):
                 </tr>
             """
 
-
             for token, data in tokens.items():
                 result_msg += f"""
                 <tr>
@@ -115,8 +116,8 @@ class MainWindow(QMainWindow):
                 """
 
             result_msg += "</table>"
+            result_msg += f"<br>{descripcion_automata}"
             self.result_area.setHtml(result_msg)
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
